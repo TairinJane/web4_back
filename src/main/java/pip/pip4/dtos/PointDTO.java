@@ -1,17 +1,19 @@
 package pip.pip4.dtos;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class PointDTO implements Serializable {
     @NotNull
-    @Max(3)
-    @Min(-5)
+    @Max(6)
+    @Min(-6)
     private Double x;
 
     @NotNull
-    @DecimalMax(value = "5", inclusive = false)
-    @DecimalMin(value = "-3", inclusive = false)
+    @Max(6)
+    @Min(-6)
     private Double y;
 
     @NotNull
@@ -22,7 +24,7 @@ public class PointDTO implements Serializable {
     @NotNull
     private Boolean result;
 
-    public PointDTO(@NotNull @Max(3) @Min(-5) Double x, @NotNull @DecimalMax(value = "5", inclusive = false) @DecimalMin(value = "-3", inclusive = false) Double y, @NotNull @Max(3) @Min(1) Integer r, @NotNull Boolean result) {
+    public PointDTO(Double x, Double y, Integer r, Boolean result) {
         this.x = x;
         this.y = y;
         this.r = r;

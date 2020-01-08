@@ -3,6 +3,7 @@ package pip.pip4.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "points")
 public class Point {
 
     @Id

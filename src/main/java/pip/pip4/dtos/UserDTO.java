@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class UserDTO implements Serializable {
 
     @NotNull
-    @Size(min=3, max=20)
+    @Size(min = 1, max = 15)
     private String username;
 
     @NotNull
-    @Size(min=4, max=60)
+    @Size(min = 1, max = 15)
     private String password;
 
     public String getUsername() {

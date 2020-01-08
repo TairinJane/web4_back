@@ -2,18 +2,17 @@ package pip.pip4.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pip.pip4.dtos.PointDTO;
 import pip.pip4.services.PointService;
 
-import java.util.List;
-
-@Controller
+@RestController
+@CrossOrigin
 @EnableAutoConfiguration
-@CrossOrigin(origins = "http://localhost:3000")
 public class PointController {
 
     private final PointService pointService;
@@ -24,13 +23,25 @@ public class PointController {
     }
 
     @GetMapping("/points")
-    List<PointDTO> getUserPoints(@RequestHeader(value = "Authorization") String tokenHeader) {
-        return pointService.getPoints(tokenHeader);
+    ResponseEntity<?> getUserPoints(Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            System.out.println("request get /points by " + username);
+            return ResponseEntity.ok(pointService.getPoints(username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("");
+        }
     }
 
     @PostMapping("/points")
-    ResponseEntity<String> addPoint(@RequestHeader(value = "Authorization") String tokenHeader, @Validated @RequestBody PointDTO point) {
-        pointService.addPoint(tokenHeader, point);
-        return ResponseEntity.ok("Point added");
+    ResponseEntity<String> addPoint(Authentication authentication, @Validated @RequestBody PointDTO point) {
+        try {
+            String username = authentication.getName();
+            System.out.println("request post /points by " + username);
+            pointService.addPoint(username, point);
+            return ResponseEntity.ok("Point added");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(e.getMessage());
+        }
     }
 }

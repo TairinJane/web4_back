@@ -1,24 +1,29 @@
 package pip.pip4.entities;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-    @Column(unique=true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
     @Column(nullable = false)
     private String password;
+    private boolean active;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Point> points;
 
-    private Date lastLogout;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     public User() {
     }
@@ -60,11 +65,19 @@ public class User {
         this.points = points;
     }
 
-    public Date getLastLogout() {
-        return lastLogout;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setLastLogout(Date lastLogout) {
-        this.lastLogout = lastLogout;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
