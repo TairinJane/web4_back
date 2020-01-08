@@ -16,8 +16,11 @@ public final class RestAuthenticationEntryPoint implements AuthenticationEntryPo
             final HttpServletRequest request,
             final HttpServletResponse response,
             final AuthenticationException ex) throws IOException {
-        response.getOutputStream().print(ex.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        if (response.getStatus() != HttpServletResponse.SC_FORBIDDEN) {
+            response.getOutputStream().print(ex.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            response.getOutputStream().flush();
+        }
     }
 
 }

@@ -29,7 +29,7 @@ public class PointController {
             System.out.println("request get /points by " + username);
             return ResponseEntity.ok(pointService.getPoints(username));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("");
+            return ResponseEntity.badRequest().body("Unable to load user points");
         }
     }
 

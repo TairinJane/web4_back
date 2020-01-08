@@ -1,6 +1,5 @@
 package pip.pip4.security;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -31,10 +30,9 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         if (defaultFailureUrl == null) {
             logger.debug("No failure URL set, sending 403 Forbidden error");
-
             response.getOutputStream().print(exception.getMessage());
-            response.sendError(HttpStatus.FORBIDDEN.value(),
-                    HttpStatus.FORBIDDEN.getReasonPhrase());
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Wrong username or password");
+            response.getOutputStream().flush();
         } else {
             saveException(request, exception);
 
