@@ -1,8 +1,9 @@
 HELP.md
 target/
 .mvn/**
-!**/src/main/**
+!**/src/main/java
 mvnw*
+**/src/main/resources/static
 
 .idea
 *.iws

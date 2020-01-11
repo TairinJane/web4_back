@@ -32,7 +32,7 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
             logger.debug("No failure URL set, sending 403 Forbidden error");
             response.getOutputStream().print(exception.getMessage());
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Wrong username or password");
-            response.getOutputStream().flush();
+            //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         } else {
             saveException(request, exception);
 
