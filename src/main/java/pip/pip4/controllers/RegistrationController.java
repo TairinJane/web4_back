@@ -13,6 +13,8 @@ import pip.pip4.entities.Role;
 import pip.pip4.entities.User;
 import pip.pip4.repositories.UserRepository;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 
 @RestController
@@ -59,5 +61,10 @@ public class RegistrationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
+    }
+
+    @GetMapping(value = {"/registration", "/login", "/main"})
+    public void redirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/");
     }
 }
