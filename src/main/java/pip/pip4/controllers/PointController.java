@@ -8,7 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pip.pip4.dtos.PointDTO;
+import pip.pip4.mbeans.AverageTimeBetweenClicksCounter;
+import pip.pip4.mbeans.PointsCounter;
 import pip.pip4.services.PointService;
+
+import java.util.Date;
 
 @RestController
 @CrossOrigin
@@ -16,10 +20,14 @@ import pip.pip4.services.PointService;
 public class PointController {
 
     private final PointService pointService;
+    private final PointsCounter pointsCounter;
+    private final AverageTimeBetweenClicksCounter clicksCounter;
 
     @Autowired
-    public PointController(PointService pointService) {
+    public PointController(PointService pointService, PointsCounter pointsCounter, AverageTimeBetweenClicksCounter clicksCounter) {
         this.pointService = pointService;
+        this.pointsCounter = pointsCounter;
+        this.clicksCounter = clicksCounter;
     }
 
     @GetMapping("/points")
@@ -36,9 +44,12 @@ public class PointController {
     @PostMapping("/points")
     ResponseEntity<String> addPoint(Authentication authentication, @Validated @RequestBody PointDTO point) {
         try {
+            long requestTime = new Date().getTime();
             String username = authentication.getName();
             System.out.println("request post /points by " + username);
             pointService.addPoint(username, point);
+            pointsCounter.incrementUserPointsCounter(username, point.getResult());
+            clicksCounter.updateAverageTimeBetweenClicks(requestTime);
             return ResponseEntity.ok("Point added");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(e.getMessage());

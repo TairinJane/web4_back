@@ -23,7 +23,7 @@ import java.util.Collections;
 public class RegistrationController {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
